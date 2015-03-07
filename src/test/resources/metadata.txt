@@ -1,0 +1,5 @@
+;FFMETADATA1
+major_brand=isom
+minor_version=0
+compatible_brands=isom3gp4
+creation_time=2013-04-22 19:53:46
