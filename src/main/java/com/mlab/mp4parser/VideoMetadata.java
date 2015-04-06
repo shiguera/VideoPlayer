@@ -1,9 +1,12 @@
 package com.mlab.mp4parser;
 
+import java.net.URL;
 import java.util.Date;
 
 public interface VideoMetadata {
 
+	URL getUrl();
+	void setUrl(URL url);
 	
 	/**
 	 * Duración del vídeo en milisegundos

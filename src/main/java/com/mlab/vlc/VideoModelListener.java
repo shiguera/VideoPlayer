@@ -1,6 +1,8 @@
 package com.mlab.vlc;
 
-public interface VideoModelListener {
+import com.mlab.patterns.Observer;
+
+public interface VideoModelListener extends Observer {
 
 	void initializationDone();
 }

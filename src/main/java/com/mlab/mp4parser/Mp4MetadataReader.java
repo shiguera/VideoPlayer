@@ -1,6 +1,8 @@
 package com.mlab.mp4parser;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Date;
 
 import com.googlecode.mp4parser.authoring.Movie;
@@ -9,9 +11,11 @@ import com.googlecode.mp4parser.authoring.container.mp4.MovieCreator;
 public class Mp4MetadataReader implements VideoMetadataReader {
 
 	Movie video;
+	URL url;
 	
 	public Mp4MetadataReader(String filepath) throws IOException {
 		video = MovieCreator.build(filepath);
+		url = new File(filepath).toURI().toURL();
 	}
 	
 	@Override
@@ -20,6 +24,7 @@ public class Mp4MetadataReader implements VideoMetadataReader {
 		meta.setLength(getDuration());
 		meta.setFps(getFps());
 		meta.setDateOfCreation(getDateOfCreation());
+		meta.setUrl(url);
 		return meta;
 	}
 	

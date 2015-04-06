@@ -28,20 +28,21 @@ public class TestMp4Parser {
 		}
 	}
 	private void testISOParser() throws IOException, URISyntaxException {
-		IsoFile mp4file = new IsoFile("GOPR0039.MP4");
+		URL url = ClassLoader.getSystemResource("gopro30fps.mp4");
+		IsoFile mp4file = new IsoFile(url.getPath());
 		//IsoFile mp4file = new IsoFile("20130422_195242.mp4");
 		MovieHeaderBox header = mp4file.getMovieBox().getMovieHeaderBox();
 		Date date = header.getCreationTime();
-		System.out.println("date: " + date.toGMTString());
-		System.out.println("duration:" +header.getDuration());
-		System.out.println("rate:" +header.getRate());
-		System.out.println("time scale:" +header.getTimescale());
-		System.out.println("volume:" +header.getVolume());
-		System.out.println("size:" +header.getSize());
+		//System.out.println("date: " + date.toGMTString());
+		//System.out.println("duration:" +header.getDuration());
+		//System.out.println("rate:" +header.getRate());
+		//System.out.println("time scale:" +header.getTimescale());
+		//System.out.println("volume:" +header.getVolume());
+		//System.out.println("size:" +header.getSize());
 
 		//Movie video = MovieCreator.build("GOPR0039.MP4");
 		
-		URL url = ClassLoader.getSystemResource("20130422_195242.mp4");
+		url = ClassLoader.getSystemResource("20130422_195242.mp4");
 		Movie video = MovieCreator.build(url.toURI().getPath());
 		long duration = 0l;
 		for(long d: video.getTracks().get(0).getSampleDurations()) {
@@ -49,11 +50,11 @@ public class TestMp4Parser {
 		}
         long durPerSample =  duration /  video.getTracks().get(0).getSamples().size();
         double fps = (double)video.getTracks().get(0).getTrackMetaData().getTimescale() / durPerSample;
-        System.out.println("fps:" + fps);
-        System.out.println("duration:" + video.getTracks().get(0).getDuration());
+        //System.out.println("fps:" + fps);
+        //System.out.println("duration:" + video.getTracks().get(0).getDuration());
         long timescale = video.getTracks().get(0).getTrackMetaData().getTimescale();
-        System.out.println("time scale:" + timescale);
-        System.out.println("duration seconds:" + duration / timescale);
+        //System.out.println("time scale:" + timescale);
+        //System.out.println("duration seconds:" + duration / timescale);
         
         
 		mp4file.close();

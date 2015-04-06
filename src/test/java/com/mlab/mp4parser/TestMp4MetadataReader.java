@@ -62,7 +62,7 @@ public class TestMp4MetadataReader {
 	
 	@Test
 	public void lengthIsCorrect() {
-		System.out.println("TestVideoMetadaImpl.lengthIsCorrect()");
+		System.out.println("TestMp4MetadataReader.lengthIsCorrect()");
 		//System.out.println(goproMeta30fps.getLength());
 		Assert.assertEquals(13513l, goproMeta30fps.getLength(),1l);
 
@@ -74,7 +74,7 @@ public class TestMp4MetadataReader {
 	}
 	@Test
 	public void fpsIsCorrect() {
-		System.out.println("TestVideoMetadaImpl.fpsIsCorrect()");
+		System.out.println("TestMp4MetadataReader.fpsIsCorrect()");
 		//System.out.println(goproMeta30fps.getFps());
 		Assert.assertEquals(30.0, goproMeta30fps.getFps(), 0.3);
 
@@ -91,7 +91,7 @@ public class TestMp4MetadataReader {
 
 	@Test
 	public void dateOfCreationIsCorrect() {
-		System.out.println("TestVideoMetadaImpl.dateOfCreationIsCorrect()");
+		System.out.println("TestMp4MetadataReader.dateOfCreationIsCorrect()");
 		Assert.assertEquals("2015-03-05 17:46:12", dateTimeToStringGpxFormat(goproMeta30fps.getDateOfCreation().getTime()));
 
 		//System.out.println(goproMeta60fps.getFps());

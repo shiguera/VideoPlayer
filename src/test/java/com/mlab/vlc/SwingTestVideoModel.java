@@ -16,6 +16,7 @@ import javax.swing.SwingUtilities;
 import junit.framework.Assert;
 
 import org.apache.log4j.PropertyConfigurator;
+import org.junit.Test;
 
 import com.coremedia.iso.IsoFile;
 import com.coremedia.iso.boxes.CompositionTimeToSample;
@@ -25,6 +26,7 @@ import com.coremedia.iso.boxes.TimeToSampleBox;
 import com.googlecode.mp4parser.authoring.Movie;
 import com.googlecode.mp4parser.authoring.Mp4TrackImpl;
 import com.googlecode.mp4parser.authoring.container.mp4.MovieCreator;
+import com.mlab.patterns.Observable;
 
 public class SwingTestVideoModel implements VideoModelListener {
 	
@@ -52,14 +54,15 @@ public class SwingTestVideoModel implements VideoModelListener {
 		panel = new JPanel();
 
 		initVideoModel();
-		//model.addListener(this);
-		//setVideoFile();
+
+//		VideoView view = new SimpleVideoView(model);
+//		view.setVideoPanelSize(400, 300);
+//		frame.add(view.getMainPanel());
 		
-		//panel.add(model.getMediaPlayerComponent());
-		//frame.getContentPane().add(panel);
 		frame.setLocation(200,200);
 		frame.pack();
 		frame.setVisible(true);
+		
 			
 
 	}
@@ -79,32 +82,42 @@ public class SwingTestVideoModel implements VideoModelListener {
 
 		
 		Assert.assertFalse(model.getMediaPlayerComponent().isDisplayable());
-		model.getMediaPlayerComponent().setBackground(Color.green);
-		frame.getContentPane().add(model.getMediaPlayerComponent());
-		Assert.assertTrue(model.getMediaPlayerComponent().isDisplayable());
-		
-		
 		boolean result = setVideoFile();
 		Assert.assertTrue(result);
 		Assert.assertTrue(model.isMediaParsed());
 				
+
+		
+		VideoView view = new SimpleVideoView(model);
+		
+		frame.getContentPane().add(view.getMainPanel());
+		Assert.assertTrue(model.getMediaPlayerComponent().isDisplayable());
+		
+		
 		
 		Assert.assertFalse(model.isPlayable());
 		model.getMediaPlayer().start();
 		Assert.assertTrue(model.isPlayable());
 
 		//model.getMediaPlayerComponent().getMediaPlayer().stop();
-		model.getMediaPlayer().pause();
-		System.out.println("length: " + model.getMediaPlayer().getLength());
-		System.out.println("fps: " + model.getMediaPlayer().getFps());
-		System.out.println("time: " + model.getMediaPlayer().getTime());
-		System.out.println("date: " + model.getMediaPlayer().getMediaMeta().getDate());
-		System.out.println("date: " + model.getMediaPlayer().getMediaMeta().getDate());
-		
-		
-		Assert.assertEquals(30.0f, model.getMediaPlayer().getFps(),0.1f);
+		//model.getMediaPlayer().pause();
+		System.out.println("length: " + model.getVideoLength());
+		System.out.println("fps: " + model.getVideoFps());
+		System.out.println("time: " + model.getTime());
+		System.out.println("date: " + model.getVideoDateOfCreation());
+				
+		Assert.assertEquals(60.0f, model.getMediaPlayer().getFps(),0.1f);
 
+		testSetTimeMethod();
 		
+	}
+	@Override
+	public Observable getObservable() {
+		return model;
+	}
+	@Override
+	public void update() {
+		// TODO
 	}
 
 	private void assertInitializationIsQuicklyEnough(long elapsed) {
@@ -112,6 +125,14 @@ public class SwingTestVideoModel implements VideoModelListener {
 		if(elapsed > this.maxInizializationMilliseconds) {
 			Assert.fail();
 		}
+	}
+	public void testSetTimeMethod() {
+		System.out.println("SwingTestVideoModel.setTimeMethodSetsTime()");
+		model.setTime(1000l);
+		//System.out.println(model.getTime());
+		Assert.assertTrue(model.getTime()>=1000l);
+		
+		
 	}
 	public boolean setVideoFile() {
 		System.out.println("TestVideoModel.setVideoFile()");
@@ -132,7 +153,7 @@ public class SwingTestVideoModel implements VideoModelListener {
 
 	private File getTestVideoFile() {
 		//URL url = ClassLoader.getSystemResource("testvideo.mp4");
-		URL url = ClassLoader.getSystemResource("GOPR0037.MP4");
+		URL url = ClassLoader.getSystemResource("gopro60fps.mp4");
 		File videofile = null;
 		try {
 			videofile = new File(url.toURI());
@@ -143,5 +164,6 @@ public class SwingTestVideoModel implements VideoModelListener {
 		}
 		return videofile;
 	}
+	
 
 }

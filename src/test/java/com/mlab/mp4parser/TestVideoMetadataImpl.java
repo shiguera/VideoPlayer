@@ -12,24 +12,19 @@ import org.junit.Test;
 
 public class TestVideoMetadataImpl {
 
-	VideoMetadata goproMeta, rrMeta;
+	VideoMetadata meta;
 	
 	@Before
 	public void setup() throws URISyntaxException, IOException {
 		System.out.println("TestVideoMetadaImpl.setup()");
+		meta = new VideoMetadataImpl();
 	}
 	@Test
 	public void metadataIsNotNullAfterCreation() {
 		System.out.println("TestVideoMetadaImpl.metadataIsNotNullAfterCreation()");
-		Assert.assertNotNull(goproMeta);
+		Assert.assertNotNull(meta);
 	}
 	
-	@Test
-	public void metadataIsNotNull() {
-		System.out.println("TestVideoMetadaImpl.metadataIsNotNull()");
-		Assert.assertNotNull(goproMeta);
-		Assert.assertNotNull(rrMeta);		
-	}
 
 
 }

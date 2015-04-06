@@ -6,23 +6,37 @@ import java.net.URL;
 
 import junit.framework.Assert;
 
-import org.junit.Before;
+import org.apache.log4j.PropertyConfigurator;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.mlab.patterns.Observable;
+
 public class TestVideoModel {
-	private final long maxInizializationMilliseconds = 500l;
+	private static final long maxInizializationMilliseconds = 7000l;
 	
-	VideoModel model;
-	private boolean listenerNotified = false;
-	@Before
-	public void initVideoModelAndVerifyListenersAreNotified() {
-		System.out.println("TestVideoModel.initVideoModelAndVerifyListenersAreNotified()");
+	static VideoModel model;
+	static private boolean listenerNotified = false;
+	@BeforeClass
+	public static void setupVideoModelAndVerifyListenersAreNotified() {
+		System.out.println("TestVideoModel.setupVideoModelAndVerifyListenersAreNotified()");
+		PropertyConfigurator.configure("log4j.properties");
 		long t0 = System.currentTimeMillis();
 		model = new VideoModelImpl();
 		model.addListener(new VideoModelListener() {
 			@Override
 			public void initializationDone() {
 				listenerNotified = true;
+			}
+
+			@Override
+			public Observable getObservable() {
+				return model;
+			}
+
+			@Override
+			public void update() {
+				// TODO Auto-generated method stub				
 			}
 		});
 
@@ -40,9 +54,9 @@ public class TestVideoModel {
 		Assert.assertTrue(model.isMediaPlayerInitialized());
 		Assert.assertTrue(listenerNotified);
 	}
-	private void assertInitializationIsQuicklyEnough(long elapsed) {
+	private static void assertInitializationIsQuicklyEnough(long elapsed) {
 		System.out.println("TestVideoModel.assertInitializationIsQuicklyEnough()");
-		if(elapsed > this.maxInizializationMilliseconds) {
+		if(elapsed > maxInizializationMilliseconds) {
 			Assert.fail();
 		}
 	}
@@ -69,6 +83,18 @@ public class TestVideoModel {
 
 		
 	}
+	
+	@Test
+	public void methodSetVideoFileReadsMetadata() {
+		System.out.println("TestVideoModel.methodSetVideoFileReadsMetadata()");	
+		
+		boolean result = model.setVideoFile(getTestVideoFile());
+		Assert.assertTrue(result);
+		Assert.assertEquals(30.0, model.getVideoFps(), 0.01);
+		Assert.assertEquals(9102l, model.getVideoLength(), 0l);
+		System.out.println(model.getVideoDateOfCreation());
+		Assert.assertEquals(1403784173000l,model.getVideoDateOfCreation(), 0l);
+	}
 	@Test 
 	public void assertFpsIsZeroAfterSetVideoFile() {
 		System.out.println("TestVideoModel.assertFpsIsZeroAfterSetVideoFile()");
@@ -86,6 +112,17 @@ public class TestVideoModel {
 		Assert.assertEquals(-1.0f, model.getMediaPlayer().getLength(),0.001f);
 	}
 
+	@Test
+	public void setTimeMethodSetsTime() {
+		System.out.println("TestVideoModel.setTimeMethodSetsTime()");
+		Assert.assertTrue(model.setVideoFile(getTestVideoFile()));
+		model.play();
+		model.setTime(1000l);
+		System.out.println(model.getTime());
+		Assert.assertTrue(model.getTime()>1000l);
+		
+	}
+	
 	private File getTestVideoFile() {
 		URL url = ClassLoader.getSystemResource("testvideo.mp4");
 		File videofile = null;
